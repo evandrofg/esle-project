@@ -68,3 +68,7 @@ The following two commands prepare and then run the benchmark.
     --db-ps-mode=disable\
     --db-driver=mysql\
     oltp_read_write run
+
+### Updating graphs
+
+The two graphs can be generated with gnuplot. To update the Universal Scalability Model graph, first update the universalscalabilitymodel.csv file with your data and run a program to find the values of Delta, Lambda and Kappa. Then update those values and range in the universalcalabilitymodel.gp file.
