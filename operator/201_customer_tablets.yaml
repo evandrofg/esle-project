@@ -68,18 +68,17 @@ spec:
     durabilityPolicy: none
     turndownPolicy: Immediate
     vitessOrchestrator:
-      configSecret:
-        name: example-cluster-config
-        key: orc_config.json
       resources:
         limits:
           memory: 128Mi
         requests:
           cpu: 100m
           memory: 128Mi
+      extraFlags:
+        recovery-period-block-duration: 5s
     partitionings:
     - equal:
-        parts: 2
+        parts: 8
         shardTemplate:
           databaseInitScriptSecret:
             name: example-cluster-config
@@ -117,7 +116,7 @@ spec:
     turndownPolicy: Immediate
     partitionings:
     - equal:
-        parts: 2
+        parts: 8
         shardTemplate:
           databaseInitScriptSecret:
             name: example-cluster-config
