@@ -6,12 +6,13 @@ gcloud auth application-default login
 
 # first run only
 # Create a bucket on GCP to store state
-gsutil mb gs://kubernetes-clusters/
+gsutil mb gs://kubs-clusters/
 
-export KOPS_STATE_STORE=gs://kubernetes-clusters/
+export KOPS_STATE_STORE=gs://kubs-clusters/
+export PROJECT=`gcloud config get-value project`
+
 
 # Create the cluster
-export PROJECT=`gcloud config get-value project`
 kops create cluster simple.k8s.local --zones us-central1-a --state ${KOPS_STATE_STORE}/ --project=${PROJECT}
 
 # Edit Cluster config
@@ -29,12 +30,13 @@ kops update cluster --name simple.k8s.local --yes --admin
 kops validate cluster --wait 10m
 
 # deploy vitess
+# update shard config parts
 kubectl apply -f operator/operator.yaml
 kubectl apply -f operator/101_initial_cluster.yaml
 kubectl apply -f operator/201_customer_tablets.yaml
 
 # port forward on host machine
-./operator/pf.sh&
+./operator/pf.sh
 
 # useful aliases
 alias vtctlclient="vtctlclient --server=localhost:15999 --logtostderr"
@@ -44,7 +46,7 @@ alias mysql="mysql -h 127.0.0.1 -P 15306 -u user"
 vtctlclient ApplyVSchema -- --vschema="$(cat operator/vschema.json)" customer
 
 # prepare and run sysbench
-sysbench\
+time sysbench\
   --tables=1\
   --mysql-db=customer\
   --mysql-user=user\
@@ -56,10 +58,10 @@ sysbench\
   --db-driver=mysql\
   oltp_read_write prepare
 
-sysbench\
+time sysbench\
   --threads=8\
   --tables=1\
-  --time=120\
+  --time=1200\
   --mysql-db=customer\
   --mysql-user=user\
   --mysql-host=127.0.0.1\

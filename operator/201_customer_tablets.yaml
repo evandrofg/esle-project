@@ -78,13 +78,13 @@ spec:
         recovery-period-block-duration: 5s
     partitionings:
     - equal:
-        parts: 8
+        parts: 6
         shardTemplate:
           databaseInitScriptSecret:
             name: example-cluster-config
             key: init_db.sql
           replication:
-            enforceSemiSync: false
+            enforceSemiSync: true
           tabletPools:
           - cell: zone1
             type: replica
@@ -94,15 +94,11 @@ spec:
                 disable_active_reparents: "true"
                 db_charset: utf8mb4
               resources:
-                limits:
-                  memory: 256Mi
                 requests:
                   cpu: 100m
                   memory: 256Mi
             mysqld:
               resources:
-                limits:
-                  memory: 512Mi
                 requests:
                   cpu: 100m
                   memory: 512Mi
@@ -116,13 +112,13 @@ spec:
     turndownPolicy: Immediate
     partitionings:
     - equal:
-        parts: 8
+        parts: 6
         shardTemplate:
           databaseInitScriptSecret:
             name: example-cluster-config
             key: init_db.sql
           replication:
-            enforceSemiSync: false
+            enforceSemiSync: true
           tabletPools:
           - cell: zone1
             type: replica
@@ -131,15 +127,11 @@ spec:
               extraFlags:
                 db_charset: utf8mb4
               resources:
-                limits:
-                  memory: 256Mi
                 requests:
                   cpu: 100m
                   memory: 256Mi
             mysqld:
               resources:
-                limits:
-                  memory: 512Mi
                 requests:
                   cpu: 100m
                   memory: 512Mi
