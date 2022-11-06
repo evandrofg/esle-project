@@ -1,0 +1,433 @@
+Config: 2 nodes, 2 shards, n1-standard-2 
+% time sysbench\
+  --tables=1\
+  --mysql-db=customer\
+  --mysql-user=user\
+  --mysql-host=127.0.0.1\
+  --mysql-port=15306\
+  --table_size=1000000\
+  --auto_inc=off\
+  --db-ps-mode=disable\
+  --db-driver=mysql\
+  oltp_read_write prepare
+sysbench 1.0.20 (using system LuaJIT 2.1.0-beta3)
+
+Creating table 'sbtest1'...
+Inserting 1000000 records into 'sbtest1'
+Creating a secondary index on 'sbtest1'...
+sysbench --tables=1 --mysql-db=customer --mysql-user=user  --mysql-port=15306  5,08s user 0,16s system 4% cpu 2:10,77 total
+evandrogiovanini@Air-de-Evandro esle-project % 
+evandrogiovanini@Air-de-Evandro esle-project % time sysbench\
+  --threads=8\
+  --tables=1\
+  --time=1200\
+  --mysql-db=customer\
+  --mysql-user=user\
+  --mysql-host=127.0.0.1\
+  --mysql-port=15306\
+  --table_size=1000000\
+  --auto_inc=off\
+  --db-ps-mode=disable\
+  --db-driver=mysql\
+  oltp_read_write run
+sysbench 1.0.20 (using system LuaJIT 2.1.0-beta3)
+
+Running the test with following options:
+Number of threads: 8
+Initializing random number generator from current time
+
+
+Initializing worker threads...
+
+Threads started!
+
+SQL statistics:
+    queries performed:
+        read:                            43568
+        write:                           12448
+        other:                           6224
+        total:                           62240
+    transactions:                        3112   (2.54 per sec.)
+    queries:                             62240  (50.81 per sec.)
+    ignored errors:                      0      (0.00 per sec.)
+    reconnects:                          0      (0.00 per sec.)
+
+General statistics:
+    total time:                          1224.8651s
+    total number of events:              3112
+
+Latency (ms):
+         min:                                 2947.37
+         avg:                                 3147.14
+         max:                                26560.97
+         95th percentile:                        0.00
+         sum:                              9793891.83
+
+Threads fairness:
+    events (avg/stddev):           389.0000/0.00
+    execution time (avg/stddev):   1224.2365/0.64
+
+sysbench --threads=8 --tables=1 --time=1200 --mysql-db=customer         run  2,06s user 2,73s system 0% cpu 20:25,46 total
+
+
+
+Config: 4 nodes, 4 shards, n1-standard-2
+
+evandrogiovanini@Air-de-Evandro esle-project % time sysbench\
+  --tables=1\
+  --mysql-db=customer\
+  --mysql-user=user\
+  --mysql-host=127.0.0.1\
+  --mysql-port=15306\
+  --table_size=1000000\
+  --auto_inc=off\
+  --db-ps-mode=disable\
+  --db-driver=mysql\
+  oltp_read_write prepare
+sysbench 1.0.20 (using system LuaJIT 2.1.0-beta3)
+
+Creating table 'sbtest1'...
+Inserting 1000000 records into 'sbtest1'
+Creating a secondary index on 'sbtest1'...
+sysbench --tables=1 --mysql-db=customer --mysql-user=user  --mysql-port=15306  4,20s user 0,18s system 3% cpu 2:00,84 total
+evandrogiovanini@Air-de-Evandro esle-project % 
+
+evandrogiovanini@Air-de-Evandro esle-project % 
+evandrogiovanini@Air-de-Evandro esle-project % time sysbench\
+  --threads=8\
+  --tables=1\
+  --time=1200\
+  --mysql-db=customer\
+  --mysql-user=user\
+  --mysql-host=127.0.0.1\
+  --mysql-port=15306\
+  --table_size=1000000\
+  --auto_inc=off\
+  --db-ps-mode=disable\
+  --db-driver=mysql\
+  oltp_read_write run
+sysbench 1.0.20 (using system LuaJIT 2.1.0-beta3)
+
+Running the test with following options:
+Number of threads: 8
+Initializing random number generator from current time
+
+
+Initializing worker threads...
+
+Threads started!
+
+SQL statistics:
+    queries performed:
+        read:                            43918
+        write:                           12548
+        other:                           6274
+        total:                           62740
+    transactions:                        3137   (2.61 per sec.)
+    queries:                             62740  (52.20 per sec.)
+    ignored errors:                      0      (0.00 per sec.)
+    reconnects:                          0      (0.00 per sec.)
+
+General statistics:
+    total time:                          1201.9861s
+    total number of events:              3137
+
+Latency (ms):
+         min:                                 2793.78
+         avg:                                 3061.90
+         max:                                 7863.48
+         95th percentile:                        0.00
+         sum:                              9605177.05
+
+Threads fairness:
+    events (avg/stddev):           392.1250/0.33
+    execution time (avg/stddev):   1200.6471/0.64
+
+sysbench --threads=8 --tables=1 --time=1200 --mysql-db=customer         run  2,22s user 2,79s system 0% cpu 20:02,62 total
+evandrogiovanini@Air-de-Evandro esle-project % 
+
+
+
+Config: 6 nodes, 6 shards, n1-standard-2
+
+evandrogiovanini@Air-de-Evandro esle-project % time sysbench\
+  --tables=1\
+  --mysql-db=customer\
+  --mysql-user=user\
+  --mysql-host=127.0.0.1\
+  --mysql-port=15306\
+  --table_size=1000000\
+  --auto_inc=off\
+  --db-ps-mode=disable\
+  --db-driver=mysql\
+  oltp_read_write prepare
+sysbench 1.0.20 (using system LuaJIT 2.1.0-beta3)
+
+Creating table 'sbtest1'...
+Inserting 1000000 records into 'sbtest1'
+Creating a secondary index on 'sbtest1'...
+sysbench --tables=1 --mysql-db=customer --mysql-user=user  --mysql-port=15306  4,18s user 0,14s system 2% cpu 2:25,77 total
+evandrogiovanini@Air-de-Evandro esle-project % 
+
+evandrogiovanini@Air-de-Evandro esle-project % time sysbench\
+  --threads=8\
+  --tables=1\
+  --time=1200\
+  --mysql-db=customer\
+  --mysql-user=user\
+  --mysql-host=127.0.0.1\
+  --mysql-port=15306\
+  --table_size=1000000\
+  --auto_inc=off\
+  --db-ps-mode=disable\
+  --db-driver=mysql\
+  oltp_read_write run
+
+sysbench 1.0.20 (using system LuaJIT 2.1.0-beta3)
+
+Running the test with following options:
+Number of threads: 8
+Initializing random number generator from current time
+
+
+Initializing worker threads...
+
+Threads started!
+
+SQL statistics:
+    queries performed:
+        read:                            43792
+        write:                           12512
+        other:                           6256
+        total:                           62560
+    transactions:                        3128   (2.60 per sec.)
+    queries:                             62560  (52.02 per sec.)
+    ignored errors:                      0      (0.00 per sec.)
+    reconnects:                          0      (0.00 per sec.)
+
+General statistics:
+    total time:                          1202.5790s
+    total number of events:              3128
+
+Latency (ms):
+         min:                                 2878.37
+         avg:                                 3072.98
+         max:                                 8223.24
+         95th percentile:                        0.00
+         sum:                              9612291.76
+
+Threads fairness:
+    events (avg/stddev):           391.0000/0.00
+    execution time (avg/stddev):   1201.5365/0.88
+
+sysbench --threads=8 --tables=1 --time=1200 --mysql-db=customer         run  2,24s user 2,83s system 0% cpu 20:04,45 total
+evandrogiovanini@Air-de-Evandro esle-project % 
+
+
+
+Config: 6 nodes, 6 shards, n1-highmem-2
+
+evandrogiovanini@Air-de-Evandro esle-project % 
+evandrogiovanini@Air-de-Evandro esle-project % time sysbench\
+  --tables=1\
+  --mysql-db=customer\
+  --mysql-user=user\
+  --mysql-host=127.0.0.1\
+  --mysql-port=15306\
+  --table_size=1000000\
+  --auto_inc=off\
+  --db-ps-mode=disable\
+  --db-driver=mysql\
+  oltp_read_write prepare
+sysbench 1.0.20 (using system LuaJIT 2.1.0-beta3)
+
+Creating table 'sbtest1'...
+Inserting 1000000 records into 'sbtest1'
+Creating a secondary index on 'sbtest1'...
+sysbench --tables=1 --mysql-db=customer --mysql-user=user  --mysql-port=15306  4,45s user 0,13s system 3% cpu 2:22,10 total
+evandrogiovanini@Air-de-Evandro esle-project % 
+evandrogiovanini@Air-de-Evandro esle-project % 
+evandrogiovanini@Air-de-Evandro esle-project % time sysbench\
+  --threads=8\
+  --tables=1\
+  --time=1200\
+  --mysql-db=customer\
+  --mysql-user=user\
+  --mysql-host=127.0.0.1\
+  --mysql-port=15306\
+  --table_size=1000000\
+  --auto_inc=off\
+  --db-ps-mode=disable\
+  --db-driver=mysql\
+  oltp_read_write run
+sysbench 1.0.20 (using system LuaJIT 2.1.0-beta3)
+
+Running the test with following options:
+Number of threads: 8
+Initializing random number generator from current time
+
+
+Initializing worker threads...
+
+
+Threads started!
+
+SQL statistics:
+    queries performed:
+        read:                            41342
+        write:                           11812
+        other:                           5906
+        total:                           59060
+    transactions:                        2953   (2.46 per sec.)
+    queries:                             59060  (49.13 per sec.)
+    ignored errors:                      0      (0.00 per sec.)
+    reconnects:                          0      (0.00 per sec.)
+
+General statistics:
+    total time:                          1202.2012s
+    total number of events:              2953
+
+Latency (ms):
+         min:                                 2820.02
+         avg:                                 3254.49
+         max:                                 9035.77
+         95th percentile:                        0.00
+         sum:                              9610499.04
+
+Threads fairness:
+    events (avg/stddev):           369.1250/0.33
+    execution time (avg/stddev):   1201.3124/0.68
+
+sysbench --threads=8 --tables=1 --time=1200 --mysql-db=customer         run  2,03s user 2,58s system 0% cpu 20:02,96 total
+evandrogiovanini@Air-de-Evandro esle-project % 
+
+
+Config: 2 nodes, 2 shards, n1-highmem-2
+
+evandrogiovanini@Air-de-Evandro esle-project % time sysbench\
+  --threads=8\
+  --tables=1\
+  --time=1200\
+  --mysql-db=customer\
+  --mysql-user=user\
+  --mysql-host=127.0.0.1\
+  --mysql-port=15306\
+  --table_size=1000000\
+  --auto_inc=off\
+  --db-ps-mode=disable\
+  --db-driver=mysql\
+  oltp_read_write run
+sysbench 1.0.20 (using system LuaJIT 2.1.0-beta3)
+
+Running the test with following options:
+Number of threads: 8
+Initializing random number generator from current time
+
+
+Initializing worker threads...
+
+Threads started!
+
+SQL statistics:
+    queries performed:
+        read:                            43008
+        write:                           12288
+        other:                           6144
+        total:                           61440
+    transactions:                        3072   (2.56 per sec.)
+    queries:                             61440  (51.13 per sec.)
+    ignored errors:                      0      (0.00 per sec.)
+    reconnects:                          0      (0.00 per sec.)
+
+General statistics:
+    total time:                          1201.6927s
+    total number of events:              3072
+
+Latency (ms):
+         min:                                 2827.29
+         avg:                                 3127.15
+         max:                                27256.21
+         95th percentile:                        0.00
+         sum:                              9606600.93
+
+Threads fairness:
+    events (avg/stddev):           384.0000/0.00
+    execution time (avg/stddev):   1200.8251/0.58
+
+sysbench --threads=8 --tables=1 --time=1200 --mysql-db=customer         run  2,17s user 2,77s system 0% cpu 20:02,69 total
+evandrogiovanini@Air-de-Evandro esle-project % 
+
+
+
+Config: 4 shards, 4 nodes, n1-highmem-2
+
+evandrogiovanini@Air-de-Evandro esle-project % time sysbench\
+  --tables=1\
+  --mysql-db=customer\
+  --mysql-user=user\
+  --mysql-host=127.0.0.1\
+  --mysql-port=15306\
+  --table_size=1000000\
+  --auto_inc=off\
+  --db-ps-mode=disable\
+  --db-driver=mysql\
+  oltp_read_write prepare
+sysbench 1.0.20 (using system LuaJIT 2.1.0-beta3)
+
+Creating table 'sbtest1'...
+Inserting 1000000 records into 'sbtest1'
+Creating a secondary index on 'sbtest1'...
+sysbench --tables=1 --mysql-db=customer --mysql-user=user  --mysql-port=15306  4,67s user 0,20s system 3% cpu 2:10,80 total
+evandrogiovanini@Air-de-Evandro esle-project % 
+time sysbench\
+  --threads=8\
+  --tables=1\
+  --time=1200\
+  --mysql-db=customer\
+  --mysql-user=user\
+  --mysql-host=127.0.0.1\
+  --mysql-port=15306\
+  --table_size=1000000\
+  --auto_inc=off\
+  --db-ps-mode=disable\
+  --db-driver=mysql\
+  oltp_read_write run
+sysbench 1.0.20 (using system LuaJIT 2.1.0-beta3)
+
+Running the test with following options:
+Number of threads: 8
+Initializing random number generator from current time
+
+
+Initializing worker threads...
+
+Threads started!
+
+SQL statistics:
+    queries performed:
+        read:                            45626
+        write:                           13036
+        other:                           6518
+        total:                           65180
+    transactions:                        3259   (2.71 per sec.)
+    queries:                             65180  (54.19 per sec.)
+    ignored errors:                      0      (0.00 per sec.)
+    reconnects:                          0      (0.00 per sec.)
+
+General statistics:
+    total time:                          1202.7559s
+    total number of events:              3259
+
+Latency (ms):
+         min:                                 2844.23
+         avg:                                 2948.64
+         max:                                 4085.79
+         95th percentile:                        0.00
+         sum:                              9609605.44
+
+Threads fairness:
+    events (avg/stddev):           407.3750/0.48
+    execution time (avg/stddev):   1201.2007/0.93
+
+sysbench --threads=8 --tables=1 --time=1200 --mysql-db=customer         run  2,46s user 2,87s system 0% cpu 20:03,53 total
+
