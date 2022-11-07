@@ -1,7 +1,54 @@
 import os
 from itertools import combinations, chain
 import logging
+
+import numpy as np
 import yaml
+
+
+
+from sklearn import linear_model
+regr = linear_model.LinearRegression()
+X = np.array(
+    [
+    [-1,-1,1],
+    [-1,1,-1],
+    [1,-1,-1],
+        [1,1,1,],
+
+       [-1,-1,-1] ,
+        [-1,1,1],
+        [1,-1,1],
+        [1,1,-1],
+       ]
+)
+y = np.array(
+    [66927,64512,65688,67788,
+
+     65352, 63252, 65058, 62013
+
+     ]
+)
+regr.fit(X, y)
+
+print("The coefficients are: \n", regr.coef_)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+exit()
+
+
 
 logging.log(0," ▬▬ι═══════ﺤ  Built by Alexandre and Evandro     -═══════ι▬▬ ")
 
@@ -32,10 +79,14 @@ def shards(reset=False):
     with open("operator/201_customer_tablets.yaml", "w") as conf:
         yaml.dump(new_config, conf)
 
-    pass
 
 def disk(reset=False):
-    pass
+    with open("operator/101_initial_cluster.yaml") as config:
+        new_config = list(yaml.load_all(config, yaml.FullLoader))[-1]
+        new_config["stringData"]["init_db.sql"] = new_config["stringData"]["init_db.sql"].replace("SET sql_log_bin = 1; #nice", "SET sql_log_bin = 1; #nice" if not reset else "SET sql_log_bin = 0; #nice")
+        new_config["stringData"]["init_db.sql"] = new_config["stringData"]["init_db.sql"].replace("SET sql_log_bin = 0; #nice", "SET sql_log_bin = 1; #nice" if not reset else "SET sql_log_bin = 0; #nice")
+    with open("operator/101_initial_cluster.yaml", "w") as conf:
+        yaml.dump(new_config, conf)
 
 def automicity(reset=False):
     """
@@ -48,13 +99,18 @@ def automicity(reset=False):
     :param reset:
     :return:
     """
+
+    """
     global new_config
     "vtttable --enable_semi_sync"
     with open("operator/201_customer_tablets.yaml") as config:
         new_config = yaml.safe_load(config)
-        new_config["spec"]["keyspaces"][1]["partitionings"][0]["shardTemplate"]["extraFlags"]["enforceSemiSync"] = False if reset else True
+        #new_config["spec"]["keyspaces"][1]["partitionings"][0]["shardTemplate"]["tabletPools"]["vttablet"]["extraFlags"]["enforceSemiSync"] = False if reset else True
+        new_config["spec"]["keyspaces"][1]["partitionings"][0]["shardTemplate"]["tabletPools"]["vttablet"]["extraFlags"]["enforceSemiSync"] = False if reset else True
+        new_config["spec"]["keyspaces"][1]["partitionings"][0]["shardTemplate"]["tabletPools"]["vttablet"]["extraFlags"]["enforceSemiSync"] = False if reset else True
     with open("operator/201_customer_tablets.yaml", "w") as conf:
         yaml.dump(new_config, conf)
+    """
     pass
 
 def ram(reset=False):
@@ -69,44 +125,57 @@ def semi_sync(reset=False):
     "vtttable --enable_semi_sync"
     with open("operator/201_customer_tablets.yaml") as config:
         new_config = yaml.safe_load(config)
-        new_config["spec"]["keyspaces"][1]["partitionings"][0]["shardTemplate"]["replication"]["enforceSemiSync"] = False if reset else True
+        new_config["spec"]["keyspaces"][1]["partitionings"][0]["equal"]["shardTemplate"]["replication"]["enforceSemiSync"] = False if reset else True
     with open("operator/201_customer_tablets.yaml", "w") as conf:
         yaml.dump(new_config, conf)
 
 # Build test configurations
-factors = ["shards", "disk", "automicity", "ram", "cpu"] #"semi-sync" --> confounded
-confounded = { "semi-sync" : ["ram", "shards"]}
+factors = ["shards", "ram", "disk", "semi_sync", "cpu"] #"semi-sync" --> confounded
+confounded = {"ram" : ["shards", "semi_sync"]} # "semi-sync" : ["ram", "shards"]}
 tests = []
-for f in factors:
-    tests.append((f,))
-for n in range(2,len(factors)+1):
+for n in range(1,len(factors)+1):
+    print(n)
     test_principal_factors = list(combinations(factors, n))
     for combo in test_principal_factors:
         test_all = combo
         for factor, dependencies in confounded.items():
-            if all(d in combo for d in dependencies):
+            if all(d in combo for d in dependencies) or all(d not in combo for d in dependencies):
                 test_all = test_all + (factor,)
         tests.append(test_all)
 
 print(list(list(t) for t  in tests))
 
+print(factors + list(confounded.keys()))
+all = ""
 for t in tests:
     # set up enviroment
-    for f in factors:
+    print("Run for ",t, "\n\n")
+    excel = ""
+    for f in (factors + list(confounded.keys())):
         if f not in t:
             eval("{}(True)".format(f))
+            excel += "LOW\t"
         else:
+            if f == "ram" or f == "cpu":
+                print("Please set up", f)
             eval("{}()".format(f))
+            excel += "HIGH\t"
     # run tests
-    healthy = os.system("kops validate cluster --wait 10m")
-    print("WARNING Could not make sure system was healthy before starting benchmark! \nIteration:{}".format(t))
+    all += "\n"+excel
+
+    input("WAITING for you to finish configuration, you should call ./run.sh now")
+
+
     print("Preparing database...")
     os.system(sysbench_prepare  + " > TEST" + str(t))
     print("Running test now...")
     os.system(sysbench_run  + " > TEST" + str(t))
-    print("Just ran " + str(t))
 
-exit()
+    print("Just ran " + str(t))
+    # delete the cluster
+    os.system("kops delete cluster simple.k8s.local --yes")
+
+print(all)
 
 
 
